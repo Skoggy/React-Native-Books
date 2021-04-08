@@ -1,29 +1,54 @@
 import React, { useState } from 'react';
-
+import useForm from './utils/useForm';
 
 const BooksFetch = () => {
 
-    const [search, setSearch] = useState({
-        title: "Harry+Potter",
-        author: 'JK+Rowling',
+    const { values, updateValue } = useForm({
+        title: "",
+        author: "",
     })
 
-    const GetBooksFromApi = async () => {
+    const [selectedBook, setSelectedBook] = useState({
+        title: '',
+        author: ''
+    })
+
+    const [foundBooks, setFoundBooks] = useState([])
+
+
+    const getBooksFromApi = async () => {
+        const apiKey = "AIzaSyDurL_v5_EsJDBBfsB87dlUMy7hkEzytyc"
         let response = await fetch(
-            `https://openlibrary.org/search.json?title=${search.title}&author=${search.author}`
+            `https://www.googleapis.com/books/v1/volumes?q=title=${values.title}&key=${apiKey}`
+            // `https://openlibrary.org/search.json?title=${values.title}&author=${values.author}`
         );
         let json = await response.json();
-        console.log(json)
-        console.log('Hey')
+        // console.log(json.items.forEach(item => item.volumeInfo))
+        json.items.forEach(item => console.log(item.volumeInfo.title))
+        console.log(json.items)
+        setFoundBooks(json.items)
+        // setSelectedBook({...selectedBook, title: response.title})
     }
 
-    GetBooksFromApi();
+    console.log(foundBooks)
     return (
         <div>
-            <form>
-                <input type='text' label="Insert Title Here" ></input>
-            </form>
+            <div>
+                <form>
+                    <input type='text' name="title" id="title" value={values.title} onChange={updateValue}></input>
+                    <input type='text' name="author" id="author" value={values.author} onChange={updateValue}></input>
 
+                </form>
+                <button onClick={getBooksFromApi}>Submit</button>
+            </div>
+            <div>
+                {foundBooks && foundBooks.map(book =>
+                    <div key={book.id}>
+                        <p>{book.volumeInfo.title}</p>
+                        <img src={book.volumeInfo.imageLinks.thumbnail}></img>
+                    </div>
+                )}
+            </div>
         </div>
     )
 }
