@@ -1,7 +1,13 @@
 import React, { useState } from 'react';
 import useForm from './utils/useForm';
+import { useQuery } from 'react-query';
 
 const BooksFetch = () => {
+
+    const { isLoading, error, data } = useQuery('getBooks', () =>
+        fetch('http://localhost:3001/api/books'))
+
+
 
     const { values, updateValue } = useForm({
         title: "",
