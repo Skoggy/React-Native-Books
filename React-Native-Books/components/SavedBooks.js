@@ -11,13 +11,6 @@ export default function SavedBooks() {
             res.json()
         )
     )
-
-
-    // fetch('http://localhost:3001/api/books').then(response => response.json()).then(res => console.log(res))
-
-
-
-
     data && data.forEach(thing => console.log(thing.title))
     return (
         <div>

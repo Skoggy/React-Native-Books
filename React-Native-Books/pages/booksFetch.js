@@ -1,12 +1,8 @@
 import React, { useState } from 'react';
-import useForm from './utils/useForm';
-import { useQuery } from 'react-query';
+import useForm from '../utils/useForm';
 
-const BooksFetch = () => {
 
-    const { isLoading, error, data } = useQuery('getBooks', () =>
-        fetch('http://localhost:3001/api/books'))
-
+export default function booksFetch() {
 
 
     const { values, updateValue } = useForm({
@@ -58,4 +54,3 @@ const BooksFetch = () => {
         </div>
     )
 }
-export default BooksFetch
